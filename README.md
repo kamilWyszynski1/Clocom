@@ -1,4 +1,4 @@
-# Console stock chart
+# Clocom
 
 First ever written application in Rust. Mainly for learning purposes.
 
@@ -11,7 +11,7 @@ pointed with '_' char.
 ![img.png](img.png)
 
 ## TODO
-* [ ] termion
+* [ ] use termion
 * [ ] cleanup code
 * [ ] error handling
 * [ ] customize data path

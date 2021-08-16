@@ -104,12 +104,22 @@ impl StockVisualizer {
         for i in 0..self.console_height {
             let mut row = String::new();
 
-            row.push_str(format!("{:<5.2}|", scale_points.get(&i).unwrap()).as_str());
+            row.push_str(
+                format!(
+                    "{:<5.2}{}|{}",
+                    scale_points.get(&i).unwrap(),
+                    color::Fg(color::Green),
+                    color::Fg(color::Reset)
+                )
+                .as_str(),
+            );
 
             for (j, r) in data.iter().enumerate() {
                 let rsc = regression_scale_points.get(&j).unwrap();
                 if rsc == &i {
-                    row.push_str(format!("{}_{}", color::Fg(color::Red), color::Fg(color::Reset)).as_str());
+                    row.push_str(
+                        format!("{}_{}", color::Fg(color::Red), color::Fg(color::Reset)).as_str(),
+                    );
                 } else if self.console_height - i <= r.open as usize {
                     row.push('#');
                 } else {
