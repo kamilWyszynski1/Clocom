@@ -118,7 +118,7 @@ impl StockVisualizer {
                 let rsc = regression_scale_points.get(&j).unwrap();
                 if rsc == &i {
                     row.push_str(
-                        format!("{}_{}", color::Fg(color::Red), color::Fg(color::Reset)).as_str(),
+                        format!("{}#{}", color::Bg(color::Red), color::Bg(color::Reset)).as_str(),
                     );
                 } else if self.console_height - i <= r.open as usize {
                     row.push('#');
