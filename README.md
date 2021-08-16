@@ -11,6 +11,7 @@ pointed with '_' char.
 ![img.png](img.png)
 
 ## TODO
+* [ ] termion
 * [ ] cleanup code
 * [ ] error handling
 * [ ] customize data path

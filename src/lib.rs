@@ -1,8 +1,9 @@
 use serde::Deserialize;
-use std::error::Error;
-use std::process::Command;
-use std::iter::Map;
 use std::collections::HashMap;
+use std::error::Error;
+use std::iter::Map;
+use std::process::Command;
+use termion::color;
 
 struct StockVisualizer {
     console_width: usize,
@@ -76,7 +77,7 @@ impl StockVisualizer {
     fn print(self, data: Vec<Record>) {
         let mut regression_points: Vec<f32> = Vec::new();
         for i in 0..self.console_width {
-            regression_points.push( self.lrc.a * i as f32 + self.lrc.b);
+            regression_points.push(self.lrc.a * i as f32 + self.lrc.b);
         }
 
         let mut scale_points: HashMap<usize, f32> = HashMap::new();
@@ -88,32 +89,27 @@ impl StockVisualizer {
 
         // match regression_points with closest scale_point.
         for (i, rp) in regression_points.iter().enumerate() {
-            let mut min :f32 = f32::MAX;
+            let mut min: f32 = f32::MAX;
             let mut minx_inx: usize = 0;
 
             for (k, v) in &scale_points {
-                if (rp-v).abs() < min {
-                    min = (rp-v).abs();
+                if (rp - v).abs() < min {
+                    min = (rp - v).abs();
                     minx_inx = *k;
                 }
             }
             regression_scale_points.insert(i, minx_inx);
         }
 
-
-
-
         for i in 0..self.console_height {
             let mut row = String::new();
 
-            row.push_str(
-                format!("{:<5.2}|", scale_points.get(&i).unwrap()).as_str(),
-            );
+            row.push_str(format!("{:<5.2}|", scale_points.get(&i).unwrap()).as_str());
 
             for (j, r) in data.iter().enumerate() {
                 let rsc = regression_scale_points.get(&j).unwrap();
                 if rsc == &i {
-                    row.push('_');
+                    row.push_str(format!("{}_{}", color::Fg(color::Red), color::Fg(color::Reset)).as_str());
                 } else if self.console_height - i <= r.open as usize {
                     row.push('#');
                 } else {
@@ -283,11 +279,11 @@ impl LinearRegressionCalculator {
         let x_sum2: f32 = x_sum.powi(2);
 
         let b = (y_sum * x2_sum - x_sum * xy_sum) / (n * x2_sum - x_sum2);
-        let a = (n*xy_sum - x_sum * y_sum) / (n * x2_sum - x_sum2);
+        let a = (n * xy_sum - x_sum * y_sum) / (n * x2_sum - x_sum2);
 
         self.a = a;
         self.b = b;
-        println!("{}x + {}", a,b)
+        println!("{}x + {}", a, b)
     }
 
     pub fn describe(self) -> (f32, f32) {
